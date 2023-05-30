@@ -5,6 +5,18 @@
 #include <vector>
 using namespace std;
 
+bool validarCorreo(const string& correo) {
+	size_t posicionArroba = correo.find("@");
+	
+	if (posicionArroba == string::npos || posicionArroba == 0 || posicionArroba == correo.length() - 1) {
+		return false;
+	}
+	
+	string dominio = correo.substr(posicionArroba + 1);
+	
+	return (dominio == "gmail.com" || dominio == "yahoo.com");
+}
+
 //Validar prefijo FIJO Y CELULAR
 bool validarPrefijo(const string& numeroCelular) {
 	string prefijo = numeroCelular.substr(0, 3);
@@ -48,34 +60,88 @@ bool contieneSoloLetras(const string& texto) {
 	return true;
 }
 	
+//CONVERTIR A MINUSCULAS
+string convertirAMinuscula(const string& str) {
+	string result = str;
+	
+	for (size_t i = 0; i < result.length(); i++) {
+		if (isupper(result[i])) {
+			result[i] = tolower(result[i]);
+		}
+	}
+	
+	return result;
+}
+
+//PRIMERA LETRA EN MAYUSCULA
+string primeraLetraMayuscula(const string & input) {
+	if (input.empty()) {
+		return input;
+	}
+	
+	string result = input; 
+	
+	result[0] = toupper(result[0]);
+	
+	return result;
+}
+
+
 //PUREBAS
 //VALIDACIÓN DE NOMBRE
-string validarNombre()
-{
+string validarNombre(){
+	int intentos = 1;
 	string nombreUsuario;
-	cout << "Nombre: ";
-	cin >> nombreUsuario;
 	
-	if (!contieneSoloLetras(nombreUsuario) || nombreUsuario.size() < 2) {
-		cout << "El nombre debe contener solo letras y tener más de una letra. Reiniciando el registro." << endl;
-		return "";
+	
+	while (intentos <= 3){
+		cout << "Nombre: ";
+		cin >> nombreUsuario;
+		nombreUsuario = convertirAMinuscula(nombreUsuario);
+		nombreUsuario = primeraLetraMayuscula(nombreUsuario);
+		
+		if (contieneSoloLetras(nombreUsuario) && nombreUsuario.size() >= 4) {
+			break;
+		}
+		
+		cout << "El nombre debe contener solo letras y tener más de una letra. Intentelo nuevamente.\n";
+		
+		intentos++;
+		
+		if(intentos > 3){
+			cout << "\nHa alcanzado el número máximo de intentos. Por seguridad debe reiniciar el proceso.\n" << endl;
+			return "";
+		}
 	}
 	
 	return nombreUsuario;
 }
 
-//VALIDACIÓN DE APELLIDO
-string validarApellido()
-{
+//VALIDAR APELLIDO
+string validarApellido(){
+	int intentos = 1;
 	string apellidoUsuario;
-	cout << "Apellido: ";
-	cin >> apellidoUsuario;
 	
-	if (!contieneSoloLetras(apellidoUsuario) || apellidoUsuario.size() < 2) {
-		cout << "El nombre debe contener solo letras y tener más de una letra. Reiniciando el registro." << endl;
-		return "";
+	
+	while (intentos <= 3){
+		cout << "Apellido: ";
+		cin >> apellidoUsuario;
+		apellidoUsuario = convertirAMinuscula(apellidoUsuario);
+		apellidoUsuario = primeraLetraMayuscula(apellidoUsuario);
+		
+		if (contieneSoloLetras(apellidoUsuario) && apellidoUsuario.size() >= 4) {
+			break;
+		}
+		
+		cout << "El apellido debe contener solo letras y tener más de una letra. Intentelo nuevamente.\n";
+		
+		intentos++;
+		if(intentos > 3){
+			cout << "\nHa alcanzado el número máximo de intentos. Por seguridad debe reiniciar el proceso.\n" << endl;
+			return "";
+		}
+		
 	}
-	
 	return apellidoUsuario;
 }
 
@@ -119,7 +185,7 @@ string validarCelular() {
 		intentos++;
 		
 		if (intentos > 3) {
-			cout << "Ha alcanzado el número máximo de intentos. Por seguridad debe reiniciar el proceso." << endl;
+			cout << "\nHa alcanzado el número máximo de intentos. Por seguridad debe reiniciar el proceso.\n" << endl;
 			return "";
 		}
 	}
@@ -143,7 +209,7 @@ string validarNumeroFijo() {
 		intentos++;
 		
 		if (intentos > 3) {
-			cout << "Ha alcanzado el número máximo de intentos. Por seguridad debe de reiniciar el proceso." << endl;
+			cout << "\nHa alcanzado el número máximo de intentos. Por seguridad debe de reiniciar el proceso.\n" << endl;
 			break;
 		}
 	}
@@ -175,7 +241,30 @@ string validarCiudad(){
 }
 
 //VALIDACION DE CORREO:
+string validarCorreo() {
+	string correo;
+	int intentos = 1;
 	
+	
+	while (intentos <= 3){
+		cout << "Correo electrónico: ";
+		cin >> correo;
+		correo = convertirAMinuscula(correo);
+		
+		if(validarCorreo(correo)) {
+			break;
+		}
+		
+		cout << "El correo electrónico no es válido. Inténtelo nuevamente.\n";
+		intentos++;
+		
+		if(intentos > 3){
+			cout << "\nHa alcanzado el número máximo de intentos. Por seguridad debe reiniciar el proceso.\n" << endl;
+			return "";
+		}
+	}
+	return correo;
+}
 	
 
 // VALIDAR NUMERO DE CUENTA
@@ -303,12 +392,12 @@ int main(int argc, char *argv[]) {
 						contadorPosicion = contadorPosicion;
 						break;
 					}
-//					//CORREO
-//					listaCorreo[contadorPosicion] = {};
-//					if (listaCorreo[contadorPosicion].empty()) {
-//						contadorPosicion = contadorPosicion;
-//						break;
-//					}
+					//CORREO
+					listaCorreo[contadorPosicion] = validarCorreo();
+					if (listaCorreo[contadorPosicion].empty()) {
+						contadorPosicion = contadorPosicion;
+						break;
+					}
 					//NUMERO DE CUENTA
 					listaNumeroCuenta[contadorPosicion] = validarNumeroCuenta();
 					if (listaNumeroCuenta[contadorPosicion].empty()) {
@@ -386,7 +475,7 @@ int main(int argc, char *argv[]) {
 			break;
 		case 3:
 			encontrado = false;
-			cout << "\nVamos a buscar un valor dentro de las listas :";
+			cout << "\nVamos a buscar un valor dentro de las listas: ";
 			cin >> valorABuscar;
 			cout << "Usuarios en la lista de nombres: ";
 			for (int i = 0; i <= 3; i++) {
