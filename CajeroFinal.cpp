@@ -310,7 +310,7 @@ int main(int argc, char *argv[]) {
 	int otroUsuario, contadorPosicion, opcion, i, saldoApertura, intentosApertura, opcionApertura;
 	
 	//Variables de prueba:
-	string valorABuscar;
+	string cuentaABuscar;
 	//
 	
 	bool encontrado;
@@ -476,25 +476,34 @@ int main(int argc, char *argv[]) {
 		case 3:
 			encontrado = false;
 			cout << "\nVamos a buscar un valor dentro de las listas: ";
-			cin >> valorABuscar;
-			cout << "Usuarios en la lista de nombres: ";
-			for (int i = 0; i <= 3; i++) {
-				cout << listaNombre[i] << " ";
-			}
-			cout << "\nValor a buscar: " << valorABuscar << endl;
-			
-			for (int i = 0; i <= 3; i++) {
-				if (listaNombre[i] == valorABuscar) {
-					encontrado = true;
-					break;
+			cin >> cuentaABuscar;
+
+			if (cuentaABuscar.size() == 5 && !contieneSoloLetras(cuentaABuscar)){
+
+				cout << "\nValor a buscar: " << cuentaABuscar << endl;
+				
+				for (int i = 0; i <= 3; i++) {
+					if (listaNumeroCuenta[i] == cuentaABuscar) {
+						encontrado = true;
+						break;
+					}
 				}
+				
+				if (encontrado) {
+					cout << "La cuenta: "+ cuentaABuscar +" sí se encuentra\n";
+				} else {
+					cout << "\nEl valor buscado no está en el arreglo\n\n";
+				}
+			} else {
+				cout << "Recuerda que las cuentas son de 5 digitos y sólo deben de contener números.\n\n";
 			}
 			
-			if (encontrado) {
-				cout << "El nombre: "+ valorABuscar +" sí se encuentra";
-			} else {
-				cout << "El valor buscado no está en el arreglo\n\n";
-			}
+//			while (encontrado){
+//				
+//				
+//				
+//			}
+
 			break;
 		case 4:
 			cout << "\nHasta luego, que vuelva pronto.\n\n";
